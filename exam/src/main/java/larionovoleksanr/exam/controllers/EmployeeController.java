@@ -33,8 +33,7 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     public NewEmployeeResponseDTO saveEmployee(@RequestBody @Validated NewEmployeeDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
-            System.out.println(validation.getAllErrors());
-            throw new BadRequestException("Ci sono errori nel payload!");
+            throw new BadRequestException(validation.getAllErrors());
         } else {
             Dipendente newAuthor = employeeService.saveEmployee(body);
             return new NewEmployeeResponseDTO(newAuthor.getId());

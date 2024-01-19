@@ -36,7 +36,7 @@ public class DeviceController {
     @ResponseStatus(HttpStatus.CREATED)
     public Dispositivo saveBlogpost(@RequestBody @Validated NewDeviceDTO payload, BindingResult validation) {
         if (validation.hasErrors()) {
-            throw new BadRequestException("Ci sono errori nel payload!");
+            throw new BadRequestException(validation.getAllErrors());
         }
 
         Dispositivo device = new Dispositivo();
@@ -60,9 +60,13 @@ public class DeviceController {
 
     @PutMapping("/{id}")
     public NewDeviceResponse findByIdAndUpdate(@PathVariable Long id,
-                                               @RequestBody NewDeviceDTO body) {
+                                               @RequestBody @Validated NewDeviceDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         Dispositivo deviceUptede = new Dispositivo();
         deviceUptede.setDeviceType(body.deviceType());
+//        non sono sicuro se aggiungere anche lo stateOfDevice nel paylod e anche qui.
 
         if(body.idEmployee() != null){
             deviceUptede.setEmployee(employeeService.findById(body.idEmployee()));
