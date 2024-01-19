@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+import static larionovoleksanr.exam.exceptions.ExceptionsHandler.newDateAndHour;
+
 @Component
 public class MailGunSender {
     private String mailGunKey;
@@ -35,7 +37,7 @@ public class MailGunSender {
                         "\n Grazie per la tua collaborazione!" +
                         "\n Cordiali Saluti," +
                         "\n EPICODE STAFF" +
-                        "\n" + LocalDate.now())
+                        "\n" + newDateAndHour())
                 .asJson();
     }
 }

@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.text.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
 
 @RestControllerAdvice
 public class ExceptionsHandler {
@@ -20,14 +20,12 @@ public class ExceptionsHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorsPayloadWhitList handleBadRequest(BadRequestException ex) {
 
-		String pattern = "E, dd MMM yyyy HH:mm:ss";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		String date = simpleDateFormat.format(new Date());
+
 
 		List<String> errorsMessages = new ArrayList<>();
 		if(ex.getErrorList() != null)
 			errorsMessages = ex.getErrorList().stream().map(errore -> errore.getDefaultMessage()).toList();
-		return new ErrorsPayloadWhitList(ex.getMessage(), date, errorsMessages);
+		return new ErrorsPayloadWhitList(ex.getMessage(), newDateAndHour(), errorsMessages);
 	}
 
 	@ExceptionHandler(NotFoundException.class)
@@ -41,5 +39,12 @@ public class ExceptionsHandler {
 	public ErrorsPayload handleGenericError(Exception ex) {
 		ex.printStackTrace();
 		return new ErrorsPayload("Un po di pazienza ci stiamo lavorando", LocalDateTime.now());
+	}
+
+	public static String newDateAndHour(){
+		String pattern = "E, dd MMM yyyy HH:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		return date;
 	}
 }
