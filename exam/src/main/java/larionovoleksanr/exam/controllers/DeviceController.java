@@ -4,6 +4,7 @@ import larionovoleksanr.exam.entities.Dipendente;
 import larionovoleksanr.exam.entities.Dispositivo;
 import larionovoleksanr.exam.exceptions.BadRequestException;
 import larionovoleksanr.exam.payloads.NewDeviceDTO;
+import larionovoleksanr.exam.payloads.NewDeviceResponse;
 import larionovoleksanr.exam.services.DeviceService;
 import larionovoleksanr.exam.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class DeviceController {
 
         Dispositivo device = new Dispositivo();
         device.setDeviceType(payload.deviceType());
-        device.setStateOfDevice(payload.stateOfDevice());
+        device.setStateOfDevice("DISPONIBILE");
 
         Long employeeId = payload.idEmployee();
         if (employeeId != null) {
@@ -58,20 +59,21 @@ public class DeviceController {
     }
 
     @PutMapping("/{id}")
-    public Dispositivo findByIdAndUpdate(@PathVariable Long id,
-                                         @RequestBody NewDeviceDTO body) {
+    public NewDeviceResponse findByIdAndUpdate(@PathVariable Long id,
+                                               @RequestBody NewDeviceDTO body) {
         Dispositivo deviceUptede = new Dispositivo();
-        deviceUptede.setStateOfDevice(body.stateOfDevice());
         deviceUptede.setDeviceType(body.deviceType());
 
         if(body.idEmployee() != null){
             deviceUptede.setEmployee(employeeService.findById(body.idEmployee()));
             mailGunSender.sendRegistrationMail(deviceUptede.getEmployee().getEmail(), deviceUptede);
         }
-        return deviceService.findByIdAndUpdate(id, deviceUptede);
+        deviceService.findByIdAndUpdate(id, deviceUptede);
+        return new NewDeviceResponse("Il dispositivo è stato aggiornato con l'id: ", deviceUptede.getId());
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable Long id) {
         deviceService.delete(id);
     }
