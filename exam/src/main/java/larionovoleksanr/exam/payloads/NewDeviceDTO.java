@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Size;
 
 public record NewDeviceDTO(
         @NotEmpty
-        @Size(min = 2, max = 20, message = "Il Cognome deve contenere tra 2 e 20 caratteri")
-        String type,
+        @Size(min = 2, max = 50, message = "Il nome del device deve essere compreso tra 2 e 50 caratteri")
+        String deviceType,
         @NotEmpty
-        @Size(min = 2, max = 20, message = "Il Cognome deve contenere tra 2 e 20 caratteri")
+        @Size(min = 8, max = 12, message = "disponibile , assegnato, in manutenzione, dismesso")
         String stateOfDevice,
         Long idEmployee
 ) {

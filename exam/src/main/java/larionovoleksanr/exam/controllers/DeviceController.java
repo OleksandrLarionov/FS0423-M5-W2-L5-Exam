@@ -2,11 +2,15 @@ package larionovoleksanr.exam.controllers;
 
 import larionovoleksanr.exam.entities.Dipendente;
 import larionovoleksanr.exam.entities.Dispositivo;
+import larionovoleksanr.exam.exceptions.BadRequestException;
 import larionovoleksanr.exam.payloads.NewDeviceDTO;
 import larionovoleksanr.exam.services.DeviceService;
 import larionovoleksanr.exam.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,22 +30,25 @@ public class DeviceController {
     }
 
     @PostMapping
-    public Dispositivo saveBlogpost(@RequestBody NewDeviceDTO payload) {
-        if (payload.idEmployee() == null) {
-            Dispositivo device = new Dispositivo();
-            device.setDeviceType(payload.type());
-            device.setStateOfDevice(payload.stateOfDevice());
-            return deviceService.saveDevice(device);
-        } else {
-            Long employeeId = payload.idEmployee();
-            Dipendente employee = employeeService.findById(employeeId);
-            Dispositivo device = new Dispositivo();
-            device.setEmployee(employee);
-            device.setDeviceType(payload.type());
-            device.setStateOfDevice(payload.stateOfDevice());
-            return deviceService.saveDevice(device);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Dispositivo saveBlogpost(@RequestBody @Validated NewDeviceDTO payload, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException("Ci sono errori nel payload!");
         }
+
+        Dispositivo device = new Dispositivo();
+        device.setDeviceType(payload.deviceType());
+        device.setStateOfDevice(payload.stateOfDevice());
+
+        Long employeeId = payload.idEmployee();
+        if (employeeId != null) {
+            Dipendente employee = employeeService.findById(employeeId);
+            device.setEmployee(employee);
+        }
+
+        return deviceService.saveDevice(device);
     }
+
 
     @GetMapping("/{id}")
     public Dispositivo findById(@PathVariable Long id) {

@@ -33,7 +33,7 @@ public class EmployeeService {
         });
         Random rndm = new Random();
         Dipendente employee = new Dipendente();
-        employee.setUsername(body.name() + "+" + body.surname() + rndm.nextInt(1, 100000));
+        employee.setUsername(body.name() + body.surname() + rndm.nextInt(1, 100000));
         employee.setName(body.name());
         employee.setSurname(body.surname());
         employee.setEmail(body.email());
