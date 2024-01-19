@@ -57,9 +57,15 @@ public class DeviceController {
 
     @PutMapping("/{id}")
     public Dispositivo findByIdAndUpdate(@PathVariable Long id,
-                                         @RequestBody Dispositivo body,
-                                         @RequestBody Dipendente employee) {
-        return deviceService.findByIdAndUpdate(id, body, employee);
+                                         @RequestBody NewDeviceDTO body) {
+        Dispositivo deviceUptede = new Dispositivo();
+        deviceUptede.setStateOfDevice(body.stateOfDevice());
+        deviceUptede.setDeviceType(body.deviceType());
+
+        if(body.idEmployee() != null){
+            deviceUptede.setEmployee(employeeService.findById(body.idEmployee()));
+        }
+        return deviceService.findByIdAndUpdate(id, deviceUptede);
     }
 
     @DeleteMapping("/{id}")

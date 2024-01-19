@@ -1,6 +1,5 @@
 package larionovoleksanr.exam.services;
 
-import larionovoleksanr.exam.entities.Dipendente;
 import larionovoleksanr.exam.entities.Dispositivo;
 import larionovoleksanr.exam.exceptions.NotFoundException;
 import larionovoleksanr.exam.repositories.DispositivoDAO;
@@ -40,11 +39,14 @@ public class DeviceService {
 
     }
 
-    public Dispositivo findByIdAndUpdate(Long id, Dispositivo body, Dipendente employee) {
+    public Dispositivo findByIdAndUpdate(Long id, Dispositivo body) {
         Dispositivo found = this.findById(id);
         found.setId(id);
         found.setDeviceType(body.getDeviceType());
         found.setStateOfDevice(body.getStateOfDevice());
+        if(body.getEmployee() != null){
+            found.setEmployee(body.getEmployee());
+        }
         return dispositivoDAO.save(found);
     }
 }
