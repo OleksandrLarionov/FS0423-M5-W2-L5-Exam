@@ -24,6 +24,7 @@ public class Dipendente {
     private String name;
     private String surname;
     private String email;
+    private String profileImage;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

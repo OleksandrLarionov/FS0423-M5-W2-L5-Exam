@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -54,5 +57,9 @@ public class EmployeeController {
         employeeService.delete(id);
     }
 
+    @PostMapping("/{employeeId}/upload")
+    public String uploadProfileImage(@RequestParam("avatar") MultipartFile file, @PathVariable(required = true) Long employeeId) throws IOException {
+        return employeeService.uploadPicture(file,employeeId);
+    }
 
 }
