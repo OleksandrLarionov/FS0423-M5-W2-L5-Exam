@@ -20,18 +20,14 @@ public class ExceptionsHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorsPayloadWhitList handleBadRequest(BadRequestException ex) {
 
-		Locale locale = new Locale("it", "IT");
-		DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
-		String time = dateFormat.format(new Date());
-
-		String pattern = "MM-dd-yyyy";
+		String pattern = "E, dd MMM yyyy HH:mm:ss";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String date = simpleDateFormat.format(new Date());
 
 		List<String> errorsMessages = new ArrayList<>();
 		if(ex.getErrorList() != null)
 			errorsMessages = ex.getErrorList().stream().map(errore -> errore.getDefaultMessage()).toList();
-		return new ErrorsPayloadWhitList(ex.getMessage(), date + "_ at _" + time, errorsMessages);
+		return new ErrorsPayloadWhitList(ex.getMessage(), date, errorsMessages);
 	}
 
 	@ExceptionHandler(NotFoundException.class)
