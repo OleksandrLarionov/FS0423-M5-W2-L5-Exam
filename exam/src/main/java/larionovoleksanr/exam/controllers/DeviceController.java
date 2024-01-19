@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import  larionovoleksanr.exam.beansConfiguration.MailGunSender;
 
 @RestController
 @RequestMapping("/devices")
@@ -21,6 +21,8 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    MailGunSender mailGunSender;
 
     @GetMapping
     public Page<Dispositivo> getDevices(@RequestParam(defaultValue = "0") int page,
@@ -64,6 +66,7 @@ public class DeviceController {
 
         if(body.idEmployee() != null){
             deviceUptede.setEmployee(employeeService.findById(body.idEmployee()));
+            mailGunSender.sendRegistrationMail(deviceUptede.getEmployee().getEmail(), deviceUptede);
         }
         return deviceService.findByIdAndUpdate(id, deviceUptede);
     }
