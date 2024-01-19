@@ -4,7 +4,7 @@ import larionovoleksanr.exam.entities.Dipendente;
 import larionovoleksanr.exam.entities.Dispositivo;
 import larionovoleksanr.exam.exceptions.BadRequestException;
 import larionovoleksanr.exam.payloads.NewDeviceDTO;
-import larionovoleksanr.exam.payloads.NewDeviceResponse;
+import larionovoleksanr.exam.payloads.NewDeviceResponseDTO;
 import larionovoleksanr.exam.services.DeviceService;
 import larionovoleksanr.exam.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +59,8 @@ public class DeviceController {
     }
 
     @PutMapping("/{id}")
-    public NewDeviceResponse findByIdAndUpdate(@PathVariable Long id,
-                                               @RequestBody @Validated NewDeviceDTO body, BindingResult validation) {
+    public NewDeviceResponseDTO findByIdAndUpdate(@PathVariable Long id,
+                                                  @RequestBody @Validated NewDeviceDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -73,7 +73,7 @@ public class DeviceController {
             mailGunSender.sendRegistrationMail(deviceUptede.getEmployee().getEmail(), deviceUptede);
         }
         deviceService.findByIdAndUpdate(id, deviceUptede);
-        return new NewDeviceResponse("Il dispositivo è stato aggiornato con l'id: ", deviceUptede.getId());
+        return new NewDeviceResponseDTO("Il dispositivo è stato aggiornato con l'id: ", deviceUptede.getId());
     }
 
     @DeleteMapping("/{id}")

@@ -1,9 +1,6 @@
 package larionovoleksanr.exam.exceptions;
-
 import lombok.Getter;
 import org.springframework.validation.ObjectError;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
