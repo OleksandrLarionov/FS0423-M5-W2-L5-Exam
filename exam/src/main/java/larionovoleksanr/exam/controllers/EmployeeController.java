@@ -23,7 +23,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public Page<Dipendente> getAuthor(@RequestParam(defaultValue = "0") int page,
+    public Page<Dipendente> getEmployee(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size,
                                       @RequestParam(defaultValue = "id") String orderBy) {
         return employeeService.getEmployees(page, size, orderBy);
